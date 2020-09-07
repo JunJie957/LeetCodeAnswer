@@ -1,28 +1,17 @@
 class Solution {
 public:
-    bool isAnagram(string s, string t)
-    {        
-        if(s.length()!= t.length())
-            return false;
+    bool isAnagram(string s, string t) {
+        int len_s = s.length(), len_t = t.length();
+        if (len_s != len_t) return false;
 
-        unsigned int test[26] = { 0 };
-        unsigned int index = -1;
-
-        for(int i = 0; i < s.length(); ++i)
-        {
-            index = s[i] - 'a';    // s的下标           
-            test[index] += 1;   
-
-            index = t[i] - 'a';    // t的下标
-            test[index] -= 1;                                    
+        int arr1[26] = { 0 }, arr2[26] = { 0 };
+        for (int i = 0; i < len_s; ++i) {
+            ++arr1[s[i] - 'a'];
+            ++arr2[t[i] - 'a'];
         }
-        
-        for(int i = 0; i < 26; ++i)
-        {
-            if(test[i] != 0)
-            {
-                return false;
-            }
+
+        for (int i = 0; i < 26; ++i) {
+            if (arr1[i] != arr2[i]) return false;
         }
         return true;
     }

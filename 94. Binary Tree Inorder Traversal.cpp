@@ -1,38 +1,35 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
+// 1. µİ¹é½â·¨ 
 class Solution {
 public:
-
-    vector<int> inorderTraversal(TreeNode* root) 
-	{
-        if(root == nullptr)
-            return res;
-
-		dfs(root);
-		return res;
-	}
-
-	void dfs(TreeNode* root)
-	{
-		// å·¦
-		if (root->left != nullptr)
-			dfs(root->left);
-
-		// æ ¹
-		res.push_back(root->val);
-		
-		// å³
-		if (root->right != nullptr)
-			dfs(root->right);
-	}
-
-private:
-	vector<int> res;
+    vector<int> v;
+    void inOrder(TreeNode* root) {
+        if (root == nullptr) return;
+        inOrder(root->left);
+        v.push_back(root->val);
+        inOrder(root->right);
+    }
+    vector<int> inorderTraversal(TreeNode* root) {
+        inOrder(root);
+        return v;
+    }
 };
+
+// 2. Ê¹ÓÃÕ»½øĞĞµü´ú£¬ÓëÇ°Ğò±éÀú²»Í¬µÄÊÇ£¬ĞèÒªÏÈ½«×ó×ÓÊ÷È«²¿ÈëÕ»£¬È»ºó·ÃÎÊ½Úµã 
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> s;
+        TreeNode* cur = root;
+        while (cur || !s.empty()) {
+            while (cur) {
+                s.push(cur);
+                cur = cur->left;
+            }
+            cur = s.top(); s.pop();
+            res.push_back(cur->val);
+            cur = cur->right;
+        }
+        return res;
+    }
+}; 
