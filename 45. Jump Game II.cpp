@@ -33,3 +33,25 @@ public:
 		return step;
 	}
 };
+
+
+// 贪心策略，第二种写法 
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int size = nums.size(); // 数组长度
+        int maxPos = 0;         // 向右能到达的最远距离
+        int preMaxPos = 0;      // 上一步能到达的最远距离
+        int step = 0;           // 记录总步数
+        for (int i = 0; i < size; ++i) {
+            if (maxPos >= i) {
+                maxPos = max(maxPos, i + nums[i]);
+                if (i == preMaxPos && preMaxPos < size - 1) {
+                    ++step; //  preMaxPos < size - 1 : 如果上一跳已经能到达终点了，就不需要增加步数了
+                    preMaxPos = maxPos;
+                }
+            }
+        }
+        return step;
+    }
+};

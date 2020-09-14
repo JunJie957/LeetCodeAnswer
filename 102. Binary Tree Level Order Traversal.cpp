@@ -1,58 +1,54 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
+// bfs 
 class Solution {
 public:
-    vector<vector<int>> levelOrder(TreeNode* root) 
-    {
-        // 层序遍历：采用队列记录每一层的所有节点值，
-        // 通过for()循环记录了每一层的所有子节点
-        // 然后采用栈记录每一层的所有value值
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if (root == nullptr) return res;
+        
+        vector<TreeNode*> node{ root };
+        vector<int> layer{ root->val };
+        res.push_back(layer);
+        queue<vector<TreeNode*>> q;
+        q.push(node);
 
-        queue<TreeNode*> q; 
-        vector<vector<int>> v;
-        vector<int> tmp;
-
-        if(root != nullptr)
-        {
-             q.push(root);
-             tmp.push_back(root->val);
-             v.push_back(tmp);
-             tmp.clear();
-        }
-           
-        while(!q.empty())
-        { 
-            for(int i = q.size() - 1; i >= 0; --i)
-            {
-                if(q.front()->left != nullptr)
-                {
-                    q.push(q.front()->left);
-                    tmp.push_back(q.front()->left->val);
-                }
+        while (!q.empty()) {
+            vector<TreeNode*> cur = q.front();
+            q.pop();
             
-                if(q.front()->right != nullptr)
-                {
-                    q.push(q.front()->right);
-                    tmp.push_back(q.front()->right->val);
+            node.clear();
+            layer.clear();
+            for (auto i : cur) {
+                if (i->left != nullptr) {
+                    node.push_back(i->left);
+                    layer.push_back(i->left->val);
                 }
-
-                q.pop();
+                if (i->right != nullptr) {
+                    node.push_back(i->right);
+                    layer.push_back(i->right->val);
+                }
             }
-
-            if(!tmp.empty())
-            {
-                v.push_back(tmp);
-                tmp.clear();
+            if (!node.empty()) {
+                q.push(node);
+                res.push_back(layer);
             }
-        }   
+        }
+        return res;
+    }
+};
 
-        return v;
+// dfs 
+class Solution {
+public:
+    vector<vector<int>> res;
+    void level(TreeNode* root, int layer) {
+        if (root == nullptr) return;
+        if (layer >= res.size()) res.emplace_back(vector<int>{});
+        res[layer].emplace_back(root->val);
+        level(root->left,  layer + 1);  // ����һ�����ͬ��ȵĽڵ����
+        level(root->right, layer + 1);  // ����һ�����ͬ��ȵĽڵ����
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        level(root, 0);
+        return res;
     }
 };
