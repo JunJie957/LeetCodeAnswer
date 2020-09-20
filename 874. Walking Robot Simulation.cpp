@@ -26,7 +26,9 @@ public:
                     if (iter == obs.end() || iter->second.find(ny) == iter->second.end()) {
                         x = nx, y = ny;
                         ans = max(ans, x * x + y * y);
-                    }
+                    } else {
+                    	break; // 遇到障碍物，继续下一个命令 
+					} 
                 }
             }
         }
