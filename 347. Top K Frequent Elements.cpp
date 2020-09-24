@@ -1,27 +1,33 @@
+// 方法1：堆(优先队列) 
+// 时间复杂度：O(Nlogk)，哈希表遍历O(N)，每次操作优先队列 O(logk)，因为优先队列的长度为K 
+// 空间复杂度：O(N) 
 class Solution {
 public:
-
-    static bool cmp(pair<int, int>& p1, pair<int, int>& p2) {
-        return p1.first > p2.first;
-    }
+    /* 自定义比较函数 */
+    struct cmp {
+        bool operator()(pair<int, int>& p1, pair<int, int>& p2) {
+            return p1.second > p2.second;
+        }
+    };
 
     vector<int> topKFrequent(vector<int>& nums, int k) {
-        
-        vector<pair<int, int>> v;
         unordered_map<int, int> um;
-
-        // 统计每个元素的出现次数
-        for (auto& num : nums) um[num]++;
-
-        // i.second = 元素出现次数， i.first = 元素值
-        for (auto& i : um) v.push_back({ i.second,i.first });
-
-        // 只需要根据出现次数排序一次即可
-        sort(v.begin(), v.end(), cmp);
+        int size = nums.size();
+        for (int i = 0; i < size; ++i)
+            ++um[nums[i]];
+        
+        priority_queue <pair<int, int>, vector<pair<int, int>>, cmp> q;
+        for (auto& i : um) {
+            if (q.size() < k) {
+                q.emplace(i);
+            } else if (q.top().second < i.second) {
+                    q.pop(); q.emplace(i);
+            }
+        }
 
         vector<int> res;
-        for (int i = 0; i < k; ++i) {
-            res.push_back(v[i].second);
+        while (!q.empty()) {
+            res.emplace_back(q.top().first); q.pop();
         }
         return res;
     }
