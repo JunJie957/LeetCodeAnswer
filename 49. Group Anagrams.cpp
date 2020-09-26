@@ -3,13 +3,14 @@ public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
         unordered_map<string, vector<string>> um;
         for (auto& iter : strs) {
-            string str = iter;
-            sort(str.begin(), str.end());
-            um[str].push_back(iter);
+            string tmp = iter;
+            sort(tmp.begin(), tmp.end());
+            um[tmp].emplace_back(iter);
         }
-        vector<vector<string>> res;
+
+        vector<vector<string>>res;
         for (auto& iter : um) {
-            res.push_back(iter.second);
+            res.emplace_back(iter.second);
         }
         return res;
     }

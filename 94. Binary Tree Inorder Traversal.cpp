@@ -1,35 +1,49 @@
-// 1. 递归解法 
+/*
+    方法1：递归
+    时间复杂度：O(n)
+    空间复杂度：最坏情况下需要空间O(n)，平均情况为O(logn)
+*/
 class Solution {
 public:
-    vector<int> v;
-    void inOrder(TreeNode* root) {
+    vector<int> res;
+    void inorder(TreeNode* root) {
         if (root == nullptr) return;
-        inOrder(root->left);
-        v.push_back(root->val);
-        inOrder(root->right);
+        inorder(root->left);
+        res.emplace_back(root->val);
+        inorder(root->right);
     }
     vector<int> inorderTraversal(TreeNode* root) {
-        inOrder(root);
-        return v;
+        inorder(root);
+        return res;
     }
 };
 
-// 2. 使用栈进行迭代，与前序遍历不同的是，需要先将左子树全部入栈，然后访问节点 
+/*
+    方法2：颜色标记法(太强了) 
+    执行用时：0 ms, 在所有 C++ 提交中击败了 100.00% 的用户
+    内存消耗：7.1 MB, 在所有 C++ 提交中击败了 69.83% 的用户
+*/
 class Solution {
+    vector<int> res;
 public:
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> res;
-        stack<TreeNode*> s;
-        TreeNode* cur = root;
-        while (cur || !s.empty()) {
-            while (cur) {
-                s.push(cur);
-                cur = cur->left;
+        bool white = false, gray = true;
+        stack<pair<bool, TreeNode*>> s;
+        s.push(make_pair(white, root));
+        while (!s.empty()) {
+            bool color = s.top().first;
+            TreeNode* t = s.top().second;
+            s.pop();
+            if (t == nullptr) continue;
+            if (color == white) {
+                s.push(make_pair(white, t->right));
+                s.push(make_pair(gray, t));
+                s.push(make_pair(white, t->left));
             }
-            cur = s.top(); s.pop();
-            res.push_back(cur->val);
-            cur = cur->right;
+            else {
+                res.emplace_back(t->val);
+            }
         }
         return res;
     }
-}; 
+};
