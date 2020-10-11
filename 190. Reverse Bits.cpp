@@ -1,21 +1,36 @@
+// ·½·¨1£ºÎ»ÔËËã£¬ whileÑ­»·ÖĞ×î¶àÑ­»·32´Î£¬ÓĞÒ»¸öÃ÷È·µÄÉÏ½ç
+// 		  ËùÒÔËäÈ»Ëæ×ÅnµÄ´óĞ¡²»Í¬£¬Ñ­»·´ÎÊı²»Í¬£¬µ«ÊÇ¶¼²»»á³¬¹ı32£¬Òò´ËÊ±¼ä¸´ÔÓ¶ÈÎªO(1) 
 class Solution {
 public:
     uint32_t reverseBits(uint32_t n) {
-  
-        // æ±‚nçš„äºŒè¿›åˆ¶å½¢å¼(å€’æ’å)
+        uint32_t ans = 0, power = 31;
+        while (n) {
+            ans += (n & 1) << power;
+            n >>= 1;
+            --power;
+        }
+        return ans;
+    }
+};
+
+// ·½·¨2£º±¿°ì·¨£¬×ª»¯Îª¶ş½øÖÆ×Ö·û´®£¬È»ºóÇóÖµ 
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        // ÇónµÄ¶ş½øÖÆĞÎÊ½(µ¹ÅÅºó)
         string s("");
         while (n != 0)
         {
             s += to_string(n % 2);
             n /= 2;
         }
-        s.insert(s.end(), 32 - s.size(), '0'); // ä½æ•°ä¸è¶³32ä½ï¼Œåˆ™åœ¨ä½ä½è¡¥é›¶
+        s.insert(s.end(), 32 - s.size(), '0'); // Î»Êı²»×ã32Î»£¬ÔòÔÚµÍÎ»²¹Áã
 
-        // æ±‚äºŒè¿›åˆ¶çš„å€¼
+        // Çó¶ş½øÖÆµÄÖµ
         uint32_t res = 0;
         for(int i = s.size() - 1, count = 0; i >= 0; --i, ++count)
             res += (s[i] - '0') * pow(2, count);
 
         return res;
     }
-};
+}; 
