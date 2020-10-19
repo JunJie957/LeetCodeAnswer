@@ -1,24 +1,20 @@
+/*
+	´ÓºóÏòÇ°±éÀú£¬ ÀûÓÃÁ½¸öÏÂ±ê±äÁ¿È·¶¨Ò»¸öµ¥´Ê£¬Ë«Ö¸Õë·¨¡£
+*/
 class Solution {
 public:
-    string reverseWords(string s)
-    {
-            reverse(s.begin(), s.end());
-        int n = s.size();
-        int pos = 0;
-        for (int begin = 0; begin < n; ++begin) {
-            if (s[begin] != ' ') {//æ‰¾åˆ°äº†ä¸‹ä¸€ä¸ªå­—ç¬¦ä¸²çš„èµ·ç‚¹
-                if (pos != 0) { //æ”¾ä¸€ä¸ªç©ºæ ¼åšé—´éš”
-                    s[pos++] = ' ';
-                }
-                int end = begin;
-                while (end < n && s[end] != ' ') {//å‰ç§»
-                    s[pos++] = s[end++];
-                }
-                reverse(s.begin() + pos - (end - begin), s.begin() + pos); //å±€éƒ¨åè½¬
-                begin = end;
+    string reverseWords(string s) {
+        string res, tmp;
+        for (int i = s.length() - 1, j = i; i >= 0; i = j) {
+            while (i >= 0 && s[i] == ' ') --i;
+            j = i;
+            while (j >= 0 && s[j] != ' ') --j;
+            tmp = s.substr(j + 1, i - j);
+            if (!tmp.empty()) {
+                if (!res.empty()) res += " ";
+                res += tmp;
             }
         }
-        s.erase(s.begin() + pos, s.end());//æœ«å°¾å¯èƒ½æœ‰å¤šä½™ç©ºæ ¼
-        return s;
+        return res;
     }
 };
