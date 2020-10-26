@@ -1,39 +1,53 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
+// ·½·¨1£ºÀûÓÃ¶îÍâµÄ´æ´¢¿Õ¼ä 
 class Solution {
 public:
     bool isPalindrome(ListNode* head) {
-         if(!head || !head->next)
-            return true;
-
-        ListNode *fast = head, *slow = head;
-        ListNode *p, *pre = NULL;
-        while(fast && fast->next)
-        {
-            p = slow;
-            slow = slow->next;    //å¿«æ…¢éåŽ†
-            fast = fast->next->next;
-
-            p->next = pre;  //ç¿»è½¬
-            pre = p;
+        if (head == nullptr || head->next == nullptr) return true;
+        ListNode* tmp = head;
+        vector<ListNode*> v;
+        while (tmp != nullptr) {
+            v.emplace_back(tmp);
+            tmp = tmp->next;
         }
 
-        if(fast)  //å¥‡æ•°ä¸ªèŠ‚ç‚¹æ—¶è·³è¿‡ä¸­é—´èŠ‚ç‚¹
-            slow = slow->next;
-
-        while(p)
-        {       //å‰åŠéƒ¨åˆ†å’ŒåŽåŠéƒ¨åˆ†æ¯”è¾ƒ
-            if(p->val != slow->val)
-                return 0;
-            p = p->next;
-            slow = slow->next;
+        int loc = v.size() - 1;
+        tmp = head;
+        while (loc >= v.size() / 2) {
+            if (tmp->val == v[loc]->val) {
+                tmp = tmp->next;
+                --loc;
+            } else {
+                return false;
+            }
         }
         return true;
     }
 };
+
+// ·½·¨2£º¿ìÂýÖ¸Õë+·´×ªÁ´±í+±È½Ï
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) return true;
+        ListNode* slow = head, *fast = head;
+        ListNode* cur = nullptr, * pre = nullptr;
+        while (fast != nullptr && fast->next != nullptr) {
+            cur = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+
+            cur->next = pre;   // ·´×ª
+            pre = cur;
+        }
+         
+        // ÆæÊý¸ö½Úµã£¬ÖÐ¼ä½Úµã²»Ëã
+        if (fast != nullptr) slow = slow->next; 
+
+        while (cur != nullptr) {
+            if (cur->val != slow->val) return false;
+            cur = cur->next;
+            slow = slow->next;
+        }
+        return true;
+    }
+}; 

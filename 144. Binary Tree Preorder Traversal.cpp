@@ -1,72 +1,71 @@
-/*
-    方法1：递归
-    时间复杂度：O(n)
-    空间复杂度：最坏情况下需要空间O(n)，平均情况为O(logn)
-*/
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+// 方法1：递归
 class Solution {
 public:
-    vector<int> res;
-    void preorder(TreeNode* root) {
+    vector<int> ans;
+    void dfs(TreeNode* root) {
         if (root == nullptr) return;
-        res.emplace_back(root->val);
-        preorder(root->left);
-        preorder(root->right);
+        dfs(root->left);
+        ans.emplace_back(root->val);
+        dfs(root->right);
     }
     vector<int> preorderTraversal(TreeNode* root) {
-        preorder(root);
-        return res;
-    }
-};
-
-/*
-    方法2：颜色标记法
-    执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
-    内存消耗：8.5 MB, 在所有 C++ 提交中击败了52.63%的用户
-*/
-class Solution {
-    vector<int> res;
-public:
-    vector<int> preorderTraversal(TreeNode* root) {
-        bool white = false, gray = true;
-        stack<pair<bool, TreeNode*>> s;
-        s.push(make_pair(white, root));
-        while (!s.empty()) {
-            bool color = s.top().first;
-            TreeNode* t = s.top().second;
-            s.pop();
-            if (t == nullptr) continue;
-            if (color == white) {
-                s.push(make_pair(white, t->right));
-                s.push(make_pair(white, t->left));
-                s.push(make_pair(gray, t));
-            }
-            else {
-                res.emplace_back(t->val);
-            }
-        }
-        return res;
+        dfs(root);
+        return ans;
     }
 };
 
-
-/*
-    方法3：普通栈
-    时间复杂度：O(n)
-	空间复杂度：O(n) 
-*/
+// 方法2：迭代
 class Solution {
-    vector<int> res;
 public:
     vector<int> preorderTraversal(TreeNode* root) {
-        if (root == nullptr) return {};
+        vector<int> ans;
         stack<TreeNode*> s;
-        s.push(root);
+        if (root != nullptr) s.emplace(root);
         while (!s.empty()) {
-            TreeNode* t = s.top();
-            s.pop();
-            res.emplace_back(t->val);
-            if (t->right) s.push(t->right);
-            if (t->left)  s.push(t->left);
+            TreeNode* t = s.top(); s.pop();
+            ans.emplace_back(t->val);
+            if (t->right != nullptr) s.emplace(t->right);
+            if (t->left != nullptr) s.emplace(t->left);
+        }
+        return ans;
+    }
+};
+
+// 方法3：Morris遍历
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        if (root == nullptr) return res;
+        TreeNode* p1 = root, * p2 = nullptr;
+        while (p1 != nullptr) {
+            p2 = p1->left;
+            if (p2 != nullptr) {
+                while (p2->right != nullptr && p2->right != p1) {
+                    p2 = p2->right;
+                }
+                if (p2->right == nullptr) {
+                    res.emplace_back(p1->val);
+                    p2->right = p1;
+                    p1 = p1->left;
+                    continue;
+                } else {
+                    p2->right = nullptr;
+                }
+            } else {
+                res.emplace_back(p1->val);
+            }
+            p1 = p1->right;
         }
         return res;
     }
