@@ -1,35 +1,36 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
+struct ListNode {
+  int val;
+  ListNode *next;
+  ListNode() : val(0), next(nullptr) {}
+  ListNode(int x) : val(x), next(nullptr) {}
+  ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
 class Solution {
 public:
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) 
-    {        
-         ListNode vHead(0), *p = &vHead;
-        int flag = 0;
-        while (l1 || l2 || flag) {
-            int tmp = 0;
-            if (l1 != nullptr) tmp += l1->val;
-            if (l2 != nullptr) tmp += l2->val;
-            tmp += flag;
-            
-            flag = tmp / 10;
-            tmp %= 10;
-            
-            ListNode *next = l1 ? l1 : l2;
-            if (next == nullptr) next = new ListNode(tmp);
-            next->val = tmp;
-            
-            p->next = next;
-            p = p->next;
-            l1 = l1 ? l1->next : nullptr;
-            l2 = l2 ? l2->next : nullptr;
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* header = new ListNode(-1);
+        ListNode* cur = header;
+        int sum = 0;
+        bool carry = false;
+        while(l1 != nullptr || l2!= nullptr || carry) {
+            if (l1 != nullptr) {
+                sum += l1->val;
+                l1 = l1->next;
+            }
+            if (l2!= nullptr) {
+                sum += l2->val;
+                l2 = l2->next;
+            }
+            if (carry) {
+                ++sum;
+            }
+
+            cur->next = new ListNode(sum % 10);
+            cur = cur->next;
+            carry = sum >= 10;
+            sum = 0;
         }
-        return vHead.next;
+        return header->next;
     }
 };
