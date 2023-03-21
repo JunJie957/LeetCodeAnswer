@@ -1,3 +1,10 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
@@ -13,7 +20,7 @@ public:
                 if (sum > 0) --right;
                 else if (sum < 0) ++left;
                 else {
-                    res.emplace_back(vector<int>{ nums[i], nums[left], nums[right] });
+                    res.emplace_back(vector<int>{nums[i], nums[left], nums[right]});
                     while (left < right && nums[left] == nums[++left]);
                     while (left < right && nums[right] == nums[--right]);
                 }

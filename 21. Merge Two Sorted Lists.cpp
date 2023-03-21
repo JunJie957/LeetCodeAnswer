@@ -1,56 +1,48 @@
-// 方法1：迭代 
-class Solution {
-public:
-	ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-		/* 如果某个链表为空 */
-		if (l1 == nullptr) return l2;
-		if (l2 == nullptr) return l1;
+#include <string>
+#include <vector>
+#include <stack>
+#include <unordered_map>
+#include <algorithm>
 
-		/* 寻找头节点 */ 
-		ListNode* newHead = nullptr;
-		if (l1->val < l2->val) {
-			newHead = l1;
-			l1 = l1->next;
-		} else {
-			newHead = l2;
-			l2 = l2->next;
-		}
+using namespace std;
 
-		/* 两个链表都不为空，继续遍历 */ 
-		ListNode* cur = newHead;
-		while (l1 != nullptr && l2 != nullptr) {
-			if (l1->val < l2->val) {
-				cur->next = l1;
-				l1 = l1->next;
-			} else {
-				cur->next = l2;
-				l2 = l2->next;
-			}
-			cur = cur->next;
-		}
-
-		/* 如果某个链表还未遍历完成 */ 
-		if (l1 != nullptr) cur->next = l1;
-		if (l2 != nullptr) cur->next = l2;
-
-		return newHead;
-	}
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-// 方法2：递归
 class Solution {
 public:
-	ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-		if (l1 == nullptr) {
-			return l2;
-		} else if (l2 == nullptr) {
-			return l1;
-		} else if (l1->val < l2->val) {
-			l1->next = mergeTwoLists(l1->next, l2);
-			return l1;
-		} else {
-			l2->next = mergeTwoLists(l1, l2->next);
-			return l2;
-		}
-	}
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if (list1 == nullptr) return list2;
+        if (list2 == nullptr) return list1;
+
+        ListNode* newHead = new ListNode(-1);
+        ListNode* cur = newHead;
+        while (list1 && list2) {
+            if (list1->val < list2->val) {
+                cur->next = list1;
+                list1 = list1->next;
+            } else {
+                cur->next = list2;
+                list2 = list2->next;
+            }
+            cur = cur->next;
+        }
+
+        if (list1) {
+            cur->next = list1;
+        } else if (list2) {
+            cur->next = list2;
+        }
+
+        auto res = newHead->next;
+        delete newHead;
+        newHead = nullptr;
+
+        return res;
+    }
 };

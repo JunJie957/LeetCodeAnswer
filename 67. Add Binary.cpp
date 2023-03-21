@@ -1,118 +1,28 @@
+#include <vector>
+#include <stack>
+#include <unordered_map>
+#include <algorithm>
+#include <istream>
+
+using namespace std;
 
 class Solution {
 public:
     string addBinary(string a, string b) {
-        string res;
-        auto ritera = a.rbegin();
-        auto riterb = b.rbegin();
-
-        char carry = '0';
-        while (ritera != a.rend() && riterb != b.rend())
-        {
-            if (*ritera == '1' && *riterb == '1')
-            {
-                if (carry == '0')
-                {
-                    res += '0';
-                }
-                else if (carry == '1')
-                {
-                    res += '1';
-                }
-                carry = '1';
-            }
-            else if ((*ritera == '1' && *riterb == '0')||(*ritera == '0' && *riterb == '1'))
-            {
-                if (carry == '0')
-                {
-                    res += '1';
-                }
-                else if (carry == '1')
-                {
-                    res += '0';
-                    carry = '1';
-                }
-            }
-            else if (*ritera == '0' && *riterb == '0')
-            {
-                if (carry == '0')
-                {
-                    res += '0';
-                }
-                else if (carry == '1')
-                {
-                    res += '1';
-                }
-                carry = '0';
-            }
-
-            ++ritera;
-            ++riterb;
+        string ans;
+        reverse(a.begin(), a.end());
+        reverse(b.begin(), b.end());
+        int n = max(a.size(), b.size()), carry = 0;
+        for (int i = 0; i < n; ++i) {
+            carry += i < a.size() ? (a[i] == '1') : 0;
+            carry += i < b.size() ? (b[i] == '1') : 0;
+            ans.push_back((carry % 2) ? '1' : '0');
+            carry /= 2;
         }
-
-      //  cout << "carry = " << carry << endl;
-        while (ritera != a.rend())
-        {
-            if (*ritera == '1')
-            {
-                if (carry == '0')
-                {
-                    res += '1';
-                }
-                else if(carry == '1')
-                {
-                    res += '0';
-                    carry = '1';
-                }
-            }
-            else if(*ritera == '0')
-            {
-                if (carry == '0')
-                {
-                    res += '0';
-                }
-                else if (carry == '1')
-                {
-                    res += '1';
-                    carry = '0';
-                }
-            }
-            ++ritera;
+        if (carry) {
+            ans.push_back('1');
         }
-
-
-        while (riterb != b.rend())
-        {
-            if (*riterb == '1')
-            {
-                if (carry == '0')
-                {
-                    res += '1';
-                }
-                else if (carry == '1')
-                {
-                    res += '0';
-                    carry = '1';
-                }
-            }
-            else if (*riterb == '0')
-            {
-                if (carry == '0')
-                {
-                    res += '0';
-                }
-                else if (carry == '1')
-                {
-                    res += '1';
-                    carry = '0';
-                }
-            }
-            ++riterb;
-        }
-
-        if (carry == '1') res += '1';
-        reverse(res.begin(), res.end());
-       // cout << res << endl;
-        return res;
+        reverse(ans.begin(), ans.end());
+        return ans;
     }
 };

@@ -1,45 +1,50 @@
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
 class Solution {
 public:
-    int myAtoi(string str) {
-		int len = str.size();
-		bool find_sign = false;
-		bool find_no_space = false;
-		string res("");
-		for (int i = 0; i < len; ++i)
-		{
-			if (str[i] == ' ' && find_no_space == false)
-				continue;
+    int myAtoi(string s) {
+        int len = s.length();
+        bool signal = false;
+        bool no_space = false;
+        std::string res;
+        for (int i = 0; i < len; ++i) {
+            // find space
+            if (s[i] == ' ' && !no_space) {
+                continue;
+            }
+            no_space = true;
 
-			find_no_space = true;
-			if (str[i] == '+' || str[i] == '-')
-			{
-				if (find_sign == false)
-				{
-					res += str[i];
-					find_sign = true;
-					continue;
-				}
-				else
-				{
-					break;
-				}
-			}
+            // signal
+            if (s[i] == '+' || s[i] == '-') {
+                if (!signal) {
+                    res += s[i];
+                    signal = true;
+                    continue;
+                } else {
+                    break;
+                }
+            }
 
-			if (str[i] >= '0' && str[i] <= '9')
-			{
-				res += str[i];
-			}
-			else
-			{
-				break;
-			}
-		}
-		if (res.empty() || (res.size() == 1 && (res[0] == '+' || res[0] == '-'))) res = '0';
-		else
-		{
-			if (atoll(res.c_str()) < -2147483648) res = "-2147483648";
-			else if(atoll(res.c_str()) > 2147483647) res = "2147483647";
-		}
-		return atoi(res.c_str());
+            // number
+            if (s[i] >= '0' && s[i] <= '9') {
+                res += s[i];
+            } else {
+                break;
+            }
+        }
+
+        if (res.empty() || (res.size() == 1 && (res[0] == '+' || res[0] == '0'))) {
+            res = '0';
+        }
+        auto num = atoll(res.c_str());
+        if (num < -2147483648) {
+            return -2147483648;
+        } else if (num > 2147483647) {
+            return 2147483647;
+        }
+        return num;
     }
 };

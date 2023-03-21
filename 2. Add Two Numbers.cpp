@@ -1,3 +1,7 @@
+#include <iostream>
+
+using namespace std;
+
 struct ListNode {
   int val;
   ListNode *next;
@@ -13,22 +17,23 @@ public:
         ListNode* cur = header;
         int sum = 0;
         bool carry = false;
-        while(l1 != nullptr || l2!= nullptr || carry) {
+        while (l1 != nullptr || l2 != nullptr || carry) {
             if (l1 != nullptr) {
                 sum += l1->val;
                 l1 = l1->next;
             }
-            if (l2!= nullptr) {
+            if (l2 != nullptr) {
                 sum += l2->val;
                 l2 = l2->next;
             }
             if (carry) {
-                ++sum;
+                sum += 1;
             }
 
             cur->next = new ListNode(sum % 10);
             cur = cur->next;
             carry = sum >= 10;
+
             sum = 0;
         }
         return header->next;

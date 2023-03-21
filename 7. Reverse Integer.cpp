@@ -1,26 +1,27 @@
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
 class Solution {
 public:
     int reverse(int x) {
-  string str = to_string(x);
-	string result("");
-	int len = str.size();
-	bool find_zero = true;
+        std::string s = std::to_string(x), res;
+        int len = s.length(), start = len - 1;
 
-	if (str[0] == '-') result += "-";
-	for (int i = len - 1; i > 0; --i)
-	{
-		if (str[i] == '0' && find_zero) continue;
-		else
-		{
-			result += str[i];
-			find_zero = false;
-		}
-	}
-	if (str[0] != '-') result += str[0];
+        if (s[0] == '-')
+            res += "-";
+        while (start > 0 && s[start] == '0')
+            --start;
+        while (start > 0)
+            res += s[start--];
+        if (s[0] != '-')
+            res += s[0];
 
-	if (atoll(result.c_str()) > pow(2, 31) - 1 || atoll(result.c_str()) < pow(-2, 31))
-		result = "0";
-	
-	return atoi(result.c_str());
+        auto num = std::atoll(res.c_str());
+        if (num > pow(2, 31) - 1 || num < pow(-2, 31)) {
+            return 0;
+        }
+        return num;
     }
 };

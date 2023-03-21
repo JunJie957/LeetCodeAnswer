@@ -1,23 +1,26 @@
-/*
-	Ì°ĞÄ²ßÂÔ£º
+#include <string>
+#include <vector>
+#include <stack>
+#include <unordered_map>
+#include <algorithm>
 
-		(1) Èç¹ûÄ³¸öÎ»ÖÃÄÜ¹»½øĞĞÆğÌø£¬Ôò½øĞĞ³¢ÊÔ£¬²¢ÇÒ¸üĞÂÄÜ¹»µ½´ïµÄ×îÔ¶¾àÀë
-		(2) Èç¹ûµ±Ç°ÄÜ¹»µ½´ïµÄ×îÔ¶¾àÀë´óÓÚµÈÓÚ n (´Ó1¿ªÊ¼ÆğÌø)£¬ÔòËµÃ÷¿ÉÒÔµ½´ï£¬·µ»Ø true
-		(3) Èç¹ûÄ³¸öÎ»ÖÃÎŞ·¨µ½´ï£¬ËµÃ÷×îÔ¶µÄ¾àÀë²»ÄÜµ½´ïµ±Ç°Î»ÖÃ£¬ÔòÒ²¾Í²»¿ÉÄÜµ½´ïÖÕµã£¬·µ»Ø false
-*/
+using namespace std;
+
 class Solution {
 public:
 	bool canJump(vector<int>& nums) {
-		int n = nums.size();
-		int right = 0;	// ÓÒ²àÄÜ¹»µ½´ïµÄ×îÔ¶¾àÀë
-		for (int i = 0; i < n; ++i) {
-			if (i <= right) {
-				right = max(right, i + nums[i]);	
-				if (right >= n - 1) {
-					return true;  
-				}
-			}
-		}
-		return false;
+	    int n = nums.size(), right = 0;
+	    for (int i = 0; i < n; ++i) {
+	        // æ˜¯å¦å¯ä»¥å‰è¿›
+	        if (right >= i) {
+	            right = max(right, i + nums[i]); // å‰è¿›æœ€å¤§çš„æ­¥æ•°
+	            if (right >= n - 1) {
+	                return true;
+	            }
+	        } else {
+	            return false; // ä¸èƒ½å†å¾€å‰è·³äº†
+	        }
+	    }
+	    return false;
 	}
 };

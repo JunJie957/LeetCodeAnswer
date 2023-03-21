@@ -1,11 +1,15 @@
+#include <vector>
+
+using namespace std;
+
 class Solution {
 public:
     int maxArea(vector<int>& height) {
-        int L = 0, R = height.size() - 1, BestArea = 0;
-        while (L < R) {
-            BestArea = max(BestArea, min(height[R], height[L]) * (R - L));
-            height[L] <= height[R] ? ++L : --R; // 总是较小者向内移动
+        int left = 0, right = height.size() - 1, best = 0;
+        while (left < right) {
+            best = max(best, min(height[right], height[left]) * (right - left));
+            height[left] <= height[right] ? ++left : --right;
         }
-        return BestArea;
+        return best;
     }
 };

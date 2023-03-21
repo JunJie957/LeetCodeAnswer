@@ -1,45 +1,39 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
+#include <string>
+#include <vector>
+#include <stack>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+struct TreeNode {
+     int val;
+     TreeNode *left;
+     TreeNode *right;
+     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
 class Solution {
 public:
-
-	void dfs(TreeNode* root)
-	{
-		if (root == nullptr)
-			return;
-
-		if (root->left != nullptr)
-			dfs(root->left);
-
-		s.push_back(root);
-
-		if (root->right != nullptr)
-			dfs(root->right);
-	}
-
-	bool isValidBST(TreeNode* root) 
-	{
-		if (root == nullptr)
-			return true;
-
-		dfs(root);
-
-		for (int i = 0; i < s.size() - 1; ++i)
-		{
-			if (s[i + 1]->val <= s[i]->val)
-				return false;
-		}
-	
-		return true;
-	}
-
-private:
-	vector<TreeNode*> s;
+    void inorder(vector<int>& nums, TreeNode* root) {
+        if (!root) {
+            return;
+        }
+        inorder(nums, root->left);
+        nums.emplace_back(root->val);
+        inorder(nums, root->right);
+    }
+    bool isValidBST(TreeNode* root) {
+        if (!root) return true;
+        vector<int> nums;
+        inorder(nums, root);
+        for (int i = 1; i < nums.size(); ++i) {
+            if (nums[i] <= nums[i - 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
 };

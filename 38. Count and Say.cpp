@@ -1,3 +1,11 @@
+#include <string>
+#include <vector>
+#include <stack>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
 class Solution {
 public:
     string countAndSay(int n) {

@@ -1,15 +1,19 @@
-// 哈希表 
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
 class Solution {
 public:
-	vector<int> twoSum(vector<int>& nums, int target) {
-		unordered_map<int, int> um; // key - 数组值 value - 下标
-		for (int i = 0; i < nums.size(); ++i) {
-			auto iter = um.find(target - nums[i]);
-			if (iter != um.end()) {
-				return { iter->second, i };
-			}
-			um[nums[i]] = i;
-		}
-		return {};
-	}
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int size = nums.size();
+        std::unordered_map<int, int> hash;
+        for (int i = 0; i < size; ++i) {
+            int r = target - nums[i];
+            if (hash.count(r)) {
+                return {hash[r], i};
+            }
+            hash[nums[i]] = i; // 璁板綍涓嬫爣
+        }
+        return {};
+    }
 };

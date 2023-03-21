@@ -1,36 +1,32 @@
+#include <string>
+
+using namespace std;
+
 class Solution {
 public:
-    string longestPalindrome(string s) {
-        int len=s.size();
-        if(len==0||len==1)
-            return s;
-        int start=0;//回文串起始位置
-        int max=1;//回文串最大长度
-        vector<vector<int>>  dp(len,vector<int>(len));//定义二维动态数组
-        for(int i=0;i<len;i++)//初始化状态
-        {
-            dp[i][i]=1;
-            if(i<len-1&&s[i]==s[i+1])
-            {
-                dp[i][i+1]=1;
-                max=2;
-                start=i;
-            }
+    pair<int, int > expand(const std::string& s, int left, int right) {
+        int size = s.size();
+        while (left >= 0 && right < size && s[left] == s[right]) {
+            --left;
+            ++right;
         }
-        for(int l=3;l<=len;l++)//l表示检索的子串长度，等于3表示先检索长度为3的子串
-        {
-            for(int i=0;i+l-1<len;i++)
-            {
-                int j=l+i-1;//终止字符位置
-                if(s[i]==s[j]&&dp[i+1][j-1]==1)//状态转移
-                {
-                    dp[i][j]=1;
-                    start=i;
-                    max=l;
-                }
-            }
-        }
-        return s.substr(start,max);//获取最长回文子串
+        return {left + 1, right - 1};
+    }
 
+    string longestPalindrome(string s) {
+        int start = 0, end = 0, size = s.length();
+        for (int i = 0; i < size; ++i) {
+            auto p1 = expand(s, i, i);
+            auto p2 = expand(s, i , i + 1);
+            if (p1.second - p1.first > end - start) {
+                start = p1.first;
+                end = p1.second;
+            }
+            if (p2.second - p2.first > end - start) {
+                start = p2.first;
+                end = p2.second;
+            }
+        }
+        return s.substr(start, end - start + 1);
     }
 };
