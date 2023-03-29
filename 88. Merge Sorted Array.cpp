@@ -31,10 +31,12 @@ public:
 // 倒序放置元素，可以节省内存空间
 class Solution {
 public:
-	void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
-	    int i = m - 1, j = n - 1, loc = m + n - 1;
-	    while (j >= 0) {
-            nums1[loc--] = (i >= 0 && nums1[i] > nums2[j]) ? nums1[i--] : nums2[j--];
-	    }
-	}
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int i = m - 1, j = n - 1, loc = m + n - 1;
+        while (i >= 0 && j >= 0) {
+            nums1[loc--] = nums1[i] > nums2[j] ? nums1[i--] : nums2[j--];
+        }
+        while (i >= 0) nums1[loc--] = nums1[i--];
+        while (j >= 0) nums1[loc--] = nums2[j--];
+    }
 };

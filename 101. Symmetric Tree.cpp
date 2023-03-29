@@ -1,43 +1,41 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
+#include <string>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
 
 class Solution {
 public:
-    bool check(TreeNode* u, TreeNode* v)
-    {
-        // 使用队列来进行迭代操作
-        queue <TreeNode*> q;
-        q.push(u); q.push(v);
-
-        while (!q.empty()) 
-        {
-            u = q.front(); q.pop();
-            v = q.front(); q.pop();
-
+    bool isSimilar(TreeNode* u, TreeNode* v) {
+        queue<TreeNode*> que;
+        que.emplace(u);
+        que.emplace(v);
+        while (!que.empty()) {
+            u = que.front(); que.pop();
+            v = que.front(); que.pop();
             if (!u && !v) continue;
-
             if ((!u || !v) || (u->val != v->val)) return false;
-
-            // 对称：左 = 右
-            q.push(u->left);
-            q.push(v->right);
-
-            // 对称： 右 = 左
-            q.push(u->right);
-            q.push(v->left);
+            que.emplace(u->left);
+            que.emplace(v->right);
+            que.emplace(u->right);
+            que.emplace(v->left);
         }
         return true;
     }
 
-    bool isSymmetric(TreeNode* root) 
-    {
-        return check(root, root);
+    bool isSymmetric(TreeNode* root) {
+        return isSimilar(root, root);
     }
 };

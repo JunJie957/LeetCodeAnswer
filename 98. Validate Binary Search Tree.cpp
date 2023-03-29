@@ -17,23 +17,23 @@ struct TreeNode {
 
 class Solution {
 public:
-    void inorder(vector<int>& nums, TreeNode* root) {
-        if (!root) {
-            return;
-        }
-        inorder(nums, root->left);
+    void inOrder(vector<int>& nums, const TreeNode* root) {
+        if (!root) return;
+        inOrder(nums, root->left);
         nums.emplace_back(root->val);
-        inorder(nums, root->right);
+        inOrder(nums, root->right);
     }
-    bool isValidBST(TreeNode* root) {
-        if (!root) return true;
-        vector<int> nums;
-        inorder(nums, root);
+    bool IsOrder(const vector<int>& nums) {
         for (int i = 1; i < nums.size(); ++i) {
             if (nums[i] <= nums[i - 1]) {
                 return false;
             }
         }
         return true;
+    }
+    bool isValidBST(TreeNode* root) {
+        vector<int> nums;
+        inOrder(nums, root);
+        return IsOrder(nums);
     }
 };

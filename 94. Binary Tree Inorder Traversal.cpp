@@ -17,18 +17,15 @@ struct TreeNode {
 
 class Solution {
 public:
-    void inorder(vector<int>& ans, const TreeNode* root) {
-        if (!root) {
-            return;
-        }
-        inorder(ans, root->left);
-        ans.emplace_back(root->val);
-        inorder(ans, root->right);
-
+    void inOrder(vector<int>& nums, const TreeNode*& root) {
+        if (!root) return;
+        inOrder(nums, root->left);
+        nums.emplace_back(root->val);
+        inOrder(nums, root->right);
     }
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> ans;
-        inorder(ans, root);
-        return ans;
+        vector<int> nums;
+        inOrder(nums, root);
+        return nums;
     }
 };

@@ -1,54 +1,79 @@
-// bfs 
+#include <string>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
 class Solution {
+public:
+    void levelOrder(vector<vector<int>>& ans, TreeNode* root, const int layer) {
+        if (!root) return;
+        if (layer >= ans.size()) {
+            ans.emplace_back(vector<int>{root->val});
+        } else {
+            ans[layer].emplace_back(root->val);
+        }
+        levelOrder(ans, root->left, layer + 1);
+        levelOrder(ans, root->right, layer + 1);
+    }
+
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ans;
+        levelOrder(ans, root, 0);
+        return ans;
+    }
+};
+
+// bfs
+class Solution2 {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
         vector<vector<int>> res;
-        if (root == nullptr) return res;
-        
-        vector<TreeNode*> node{ root };
+        if (!root) return res;
+
+        // layer
         vector<int> layer{ root->val };
-        res.push_back(layer);
+        res.emplace_back(layer);
+        // node
+        vector<TreeNode*> node { root };
         queue<vector<TreeNode*>> q;
         q.push(node);
 
         while (!q.empty()) {
-            vector<TreeNode*> cur = q.front();
+            auto cur = q.front();
             q.pop();
-            
+
             node.clear();
             layer.clear();
-            for (auto i : cur) {
-                if (i->left != nullptr) {
-                    node.push_back(i->left);
-                    layer.push_back(i->left->val);
+
+            for (auto& i : cur) {
+                if (i->left) {
+                    node.emplace_back(i->left);
+                    layer.emplace_back(i->left->val);
                 }
-                if (i->right != nullptr) {
-                    node.push_back(i->right);
-                    layer.push_back(i->right->val);
+                if (i->right) {
+                    node.emplace_back(i->right);
+                    layer.emplace_back(i->right->val);
                 }
             }
+
             if (!node.empty()) {
                 q.push(node);
-                res.push_back(layer);
+                res.emplace_back(layer);
             }
         }
-        return res;
-    }
-};
-
-// dfs 
-class Solution {
-public:
-    vector<vector<int>> res;
-    void level(TreeNode* root, int layer) {
-        if (root == nullptr) return;
-        if (layer >= res.size()) res.emplace_back(vector<int>{});
-        res[layer].emplace_back(root->val);
-        level(root->left,  layer + 1);  // 将下一层的相同广度的节点入队
-        level(root->right, layer + 1);  // 将下一层的相同广度的节点入队
-    }
-    vector<vector<int>> levelOrder(TreeNode* root) {
-        level(root, 0);
         return res;
     }
 };
